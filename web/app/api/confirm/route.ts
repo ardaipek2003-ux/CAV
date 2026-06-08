@@ -10,11 +10,11 @@ export async function POST(req: Request) {
     }
 
     const body = await req.json();
-    const { orderId, proposedSpots } = body;
+    const { orderId } = body;
 
-    if (!orderId || !proposedSpots) {
+    if (!orderId) {
       return NextResponse.json(
-        { error: 'orderId and proposedSpots are required' },
+        { error: 'orderId is required' },
         { status: 400 }
       );
     }
@@ -29,7 +29,6 @@ export async function POST(req: Request) {
       },
       body: JSON.stringify({
         order_id: orderId,
-        proposed_spots: proposedSpots,
         buyer_id: session.user.id,
       }),
     });

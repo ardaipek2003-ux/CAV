@@ -9,7 +9,7 @@ interface QuoteResponse {
   orderId: string;
   deliveryDate: string;
   spotsNeeded: number;
-  proposedSpots: Array<{ spotId: string; moduleNumber: number; rowNumber: number }>;
+  modulesUsed: number;
 }
 
 export default function NewOrderPage() {
@@ -79,7 +79,6 @@ export default function NewOrderPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           orderId: quote.orderId,
-          proposedSpots: quote.proposedSpots,
         }),
       });
 
@@ -233,7 +232,7 @@ export default function NewOrderPage() {
             <div className="bg-gray-800/50 rounded-xl p-4">
               <div className="text-xs text-gray-400 mb-1">Modules Used</div>
               <div className="text-lg font-semibold">
-                {new Set(quote.proposedSpots.map((s) => s.moduleNumber)).size} modules
+                {quote.modulesUsed} modules
               </div>
             </div>
           </div>
