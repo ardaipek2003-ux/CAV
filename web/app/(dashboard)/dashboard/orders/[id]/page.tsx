@@ -73,8 +73,10 @@ export default function OrderDetailPage() {
   const router = useRouter();
   const id = params.id as string;
   const [cancelling, setCancelling] = useState(false);
+  const [confirming, setConfirming] = useState(false);
+  const [showCancelConfirm, setShowCancelConfirm] = useState(false);
 
-  const { data: order, isLoading, error } = useQuery<OrderDetail>({
+  const { data: order, isLoading, error, refetch } = useQuery<OrderDetail>({
     queryKey: ['order', id],
     queryFn: async () => {
       const res = await fetch(`/api/orders/${id}`);
@@ -115,7 +117,6 @@ export default function OrderDetailPage() {
     : 0;
 
   const handleCancel = async () => {
-    if (!window.confirm('Are you sure you want to cancel this order?')) return;
     setCancelling(true);
     try {
       const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
@@ -125,6 +126,24 @@ export default function OrderDetailPage() {
       alert('Failed to cancel order. Please try again.');
     } finally {
       setCancelling(false);
+      setShowCancelConfirm(false);
+    }
+  };
+
+  const handleConfirm = async () => {
+    setConfirming(true);
+    try {
+      const res = await fetch('/api/confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ orderId: id }),
+      });
+      if (!res.ok) throw new Error('Failed to confirm order');
+      await refetch();
+    } catch (err) {
+      alert('Failed to confirm order. Please try again.');
+    } finally {
+      setConfirming(false);
     }
   };
 
@@ -143,13 +162,42 @@ export default function OrderDetailPage() {
           </h1>
         </div>
         {order.status === 'PENDING' && (
-          <button 
-            onClick={handleCancel} 
-            disabled={cancelling}
-            className="btn-secondary text-red-400 border-red-500/20 hover:bg-red-500/10 hover:border-red-500/40 disabled:opacity-50 transition-all"
-          >
-            {cancelling ? 'Cancelling...' : 'Cancel Order'}
-          </button>
+          <div className="flex gap-3 items-center">
+            <button 
+              onClick={handleConfirm} 
+              disabled={confirming || cancelling}
+              className="btn-primary disabled:opacity-50 transition-all"
+            >
+              {confirming ? 'Confirming...' : 'Confirm Order'}
+            </button>
+            {showCancelConfirm ? (
+              <div className="flex gap-2 items-center bg-red-500/10 border border-red-500/20 px-3 py-1.5 rounded-xl">
+                <span className="text-sm text-red-400">Sure?</span>
+                <button 
+                  onClick={handleCancel}
+                  disabled={cancelling}
+                  className="text-sm font-semibold text-red-400 hover:text-red-300 disabled:opacity-50"
+                >
+                  Yes, cancel
+                </button>
+                <button 
+                  onClick={() => setShowCancelConfirm(false)}
+                  disabled={cancelling}
+                  className="text-sm text-gray-400 hover:text-white disabled:opacity-50"
+                >
+                  No
+                </button>
+              </div>
+            ) : (
+              <button 
+                onClick={() => setShowCancelConfirm(true)} 
+                disabled={cancelling || confirming}
+                className="btn-secondary text-red-400 border-red-500/20 hover:bg-red-500/10 hover:border-red-500/40 disabled:opacity-50 transition-all"
+              >
+                Cancel Order
+              </button>
+            )}
+          </div>
         )}
       </div>
 

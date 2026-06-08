@@ -188,7 +188,7 @@ export default function NewOrderPage() {
         </p>
         {loading && (
           <p className="text-sm text-yellow-500 mt-3 animate-pulse">
-            Calculating optimal layout... This may take a few seconds for very large orders.
+            Calculating optimal layout... This may take a few minutes for very large orders.
           </p>
         )}
       </form>

@@ -25,6 +25,7 @@ export default function AdminPage() {
   const { data: session } = useSession();
   const router = useRouter();
   const [cancellingId, setCancellingId] = useState<string | null>(null);
+  const [showCancelConfirmId, setShowCancelConfirmId] = useState<string | null>(null);
 
   useEffect(() => {
     if (session && session.user.role !== 'ADMIN') {
@@ -53,7 +54,6 @@ export default function AdminPage() {
   };
 
   const handleCancelOrder = async (id: string) => {
-    if (!window.confirm('Are you sure you want to cancel this order? This will free all spots and delete plants/jobs.')) return;
     setCancellingId(id);
     try {
       const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
@@ -63,6 +63,7 @@ export default function AdminPage() {
       alert('Failed to cancel order. Please try again.');
     } finally {
       setCancellingId(null);
+      setShowCancelConfirmId(null);
     }
   };
 
@@ -158,13 +159,33 @@ export default function AdminPage() {
                         : '—'}
                     </td>
                     <td className="px-6 py-3 text-right">
-                      <button 
-                        onClick={() => handleCancelOrder(order.id)}
-                        disabled={cancellingId === order.id}
-                        className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors disabled:opacity-50"
-                      >
-                        {cancellingId === order.id ? '...' : 'Cancel'}
-                      </button>
+                      {showCancelConfirmId === order.id ? (
+                        <div className="flex gap-2 justify-end items-center">
+                          <span className="text-xs text-red-400">Sure?</span>
+                          <button 
+                            onClick={() => handleCancelOrder(order.id)}
+                            disabled={cancellingId === order.id}
+                            className="text-xs font-semibold text-red-400 hover:text-red-300 disabled:opacity-50"
+                          >
+                            Yes
+                          </button>
+                          <button 
+                            onClick={() => setShowCancelConfirmId(null)}
+                            disabled={cancellingId === order.id}
+                            className="text-xs text-gray-400 hover:text-white disabled:opacity-50"
+                          >
+                            No
+                          </button>
+                        </div>
+                      ) : (
+                        <button 
+                          onClick={() => setShowCancelConfirmId(order.id)}
+                          disabled={cancellingId === order.id}
+                          className="text-red-400 hover:text-red-300 text-sm font-medium transition-colors disabled:opacity-50"
+                        >
+                          {cancellingId === order.id ? '...' : 'Cancel'}
+                        </button>
+                      )}
                     </td>
                   </tr>
                 ))}
