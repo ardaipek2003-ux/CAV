@@ -72,7 +72,9 @@ async def quote(body: QuoteRequest, request: Request):
             FROM spots
             WHERE status = 'EMPTY'
             ORDER BY module_number ASC, row_number ASC, spot_number ASC
+            LIMIT $1
             """,
+            spots_needed + 100
         )
 
         if len(empty_spots) < spots_needed:
