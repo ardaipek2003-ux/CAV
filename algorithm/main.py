@@ -6,7 +6,8 @@ FastAPI microservice handling quote, confirm, and optimize operations.
 import os
 import asyncpg
 from contextlib import asynccontextmanager
-from fastapi import FastAPI
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 
@@ -58,3 +59,13 @@ app.include_router(optimizer_router)
 async def health():
     """Health check endpoint."""
     return {"status": "ok", "service": "vertical-farm-algorithm"}
+
+@app.exception_handler(Exception)
+async def generic_exception_handler(request: Request, exc: Exception):
+    import traceback
+    print(f"Global Exception: {exc}")
+    print(traceback.format_exc())
+    return JSONResponse(
+        status_code=500,
+        content={"detail": f"Internal Server Error: {str(exc)}", "traceback": traceback.format_exc()}
+    )
