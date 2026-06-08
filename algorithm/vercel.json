@@ -1,0 +1,24 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "main.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "main.py"
+    }
+  ],
+  "env": {
+    "DATABASE_URL": "postgresql://neondb_owner:npg_Yfs8K6RBNMwG@ep-summer-art-a2f1eu2i.eu-central-1.aws.neon.tech/neondb?sslmode=require",
+    "NEXTJS_ORIGIN": "*",
+    "ROBOT_JOBS_PER_DAY": "500",
+    "LETTUCE_BASELINE_DAYS": "30",
+    "TOMATO_BASELINE_DAYS": "60",
+    "LETTUCE_KG_PER_SPOT": "0.3",
+    "TOMATO_KG_PER_SPOT": "0.5"
+  }
+}

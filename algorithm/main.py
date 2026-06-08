@@ -22,27 +22,20 @@ DATABASE_URL = os.getenv("DATABASE_URL", "postgresql://vfarm:vfarm_secret@localh
 pool: asyncpg.Pool | None = None
 
 
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    """Manage database connection pool lifecycle."""
-    global pool
-    pool = await asyncpg.create_pool(
-        DATABASE_URL,
-        min_size=5,
-        max_size=20,
-    )
-    print(f"OK Database pool created (min=5, max=20)")
-    app.state.pool = pool
-    yield
-    await pool.close()
-    print("Database pool closed")
-
-
 app = FastAPI(
     title="CAV Algorithm Service",
     version="1.0.0",
-    lifespan=lifespan,
 )
+
+@app.middleware("http")
+async def db_session_middleware(request, call_next):
+    if getattr(request.app.state, "pool", None) is None:
+        request.app.state.pool = await asyncpg.create_pool(
+            DATABASE_URL,
+            min_size=1,
+            max_size=5,
+        )
+    return await call_next(request)
 
 # CORS — allow Next.js origin
 app.add_middleware(
