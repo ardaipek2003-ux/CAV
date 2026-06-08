@@ -6,6 +6,7 @@ import { usePathname } from 'next/navigation';
 import { signOut, useSession } from 'next-auth/react';
 
 const navItems = [
+  { href: '/dashboard', label: 'Dashboard Home', icon: '🏠' },
   { href: '/dashboard/orders', label: 'My Orders', icon: '📦' },
   { href: '/dashboard/order/new', label: 'New Order', icon: '➕' },
   { href: '/dashboard/map', label: 'Facility Map', icon: '🗺️' },
@@ -29,7 +30,7 @@ export default function DashboardLayout({
       {/* Sidebar */}
       <aside className="w-64 bg-gray-900/50 border-r border-gray-800/50 flex flex-col fixed h-full">
         <div className="p-6 border-b border-gray-800/50 flex justify-center">
-          <Link href="/dashboard/orders" className="flex items-center">
+          <Link href="/dashboard" className="flex items-center">
             <Image src="/logo.png" alt="CAV" width={120} height={75} className="object-contain" />
           </Link>
         </div>

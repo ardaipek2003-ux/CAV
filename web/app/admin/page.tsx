@@ -26,6 +26,8 @@ export default function AdminPage() {
   const router = useRouter();
   const [cancellingId, setCancellingId] = useState<string | null>(null);
   const [showCancelConfirmId, setShowCancelConfirmId] = useState<string | null>(null);
+  const [isOptimizing, setIsOptimizing] = useState(false);
+  const [optimizeMessage, setOptimizeMessage] = useState<{type: 'success'|'error', text: string} | null>(null);
 
   useEffect(() => {
     if (session && session.user.role !== 'ADMIN') {
@@ -44,12 +46,23 @@ export default function AdminPage() {
   });
 
   const handleTriggerOptimizer = async () => {
+    setIsOptimizing(true);
+    setOptimizeMessage(null);
     try {
       const algorithmUrl = process.env.NEXT_PUBLIC_ALGORITHM_URL || '';
-      await fetch('/api/admin/optimize', { method: 'POST' });
+      const res = await fetch('/api/admin/optimize', { method: 'POST' });
+      if (!res.ok) {
+        throw new Error('Failed to trigger optimization');
+      }
+      const data = await res.json();
+      setOptimizeMessage({ type: 'success', text: data.message || 'Optimizer completed successfully.' });
       refetch();
     } catch (error) {
       console.error('Optimizer trigger failed:', error);
+      setOptimizeMessage({ type: 'error', text: 'Optimizer trigger failed. Please check the algorithm service.' });
+    } finally {
+      setIsOptimizing(false);
+      setTimeout(() => setOptimizeMessage(null), 5000);
     }
   };
 
@@ -78,9 +91,29 @@ export default function AdminPage() {
           <h1 className="text-3xl font-bold">Admin Panel</h1>
           <p className="text-gray-400 mt-1">Facility overview and management</p>
         </div>
-        <button onClick={handleTriggerOptimizer} className="btn-primary">
-          🔄 Run Optimizer
-        </button>
+        <div className="flex flex-col items-end gap-2">
+          <button 
+            onClick={handleTriggerOptimizer} 
+            disabled={isOptimizing}
+            className="btn-primary disabled:opacity-50 min-w-[160px] flex justify-center items-center gap-2"
+          >
+            {isOptimizing ? (
+              <span className="flex items-center gap-2">
+                <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full" />
+                Running...
+              </span>
+            ) : (
+              '🔄 Run Optimizer'
+            )}
+          </button>
+          {optimizeMessage && (
+            <div className={`text-sm px-3 py-1.5 rounded-lg animate-in fade-in slide-in-from-top-2 ${
+              optimizeMessage.type === 'success' ? 'bg-green-500/10 text-green-400 border border-green-500/20' : 'bg-red-500/10 text-red-400 border border-red-500/20'
+            }`}>
+              {optimizeMessage.text}
+            </div>
+          )}
+        </div>
       </div>
 
       {isLoading && (

@@ -29,11 +29,22 @@ export default function RegisterPage() {
 
       if (!res.ok) {
         setError(data.error || 'Registration failed');
+        setLoading(false);
         return;
       }
 
-      // Auto-redirect to login on success
-      router.push('/login?registered=true');
+      const signInResult = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (signInResult?.error) {
+        setError('Registered successfully, but failed to sign in automatically.');
+      } else {
+        router.push('/dashboard');
+        router.refresh();
+      }
     } catch {
       setError('Something went wrong. Please try again.');
     } finally {
