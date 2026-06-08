@@ -93,7 +93,7 @@ async def run_optimizer(pool, order_id: str | None = None):
         # 5. Build relocation candidates
         candidates = []
         used_empty_spots = set()
-        now = datetime.now(timezone.utc)
+        now = datetime.utcnow()
 
         for oid, plants in orders_map.items():
             # Bottleneck = first plant (sorted DESC by expected_harvest)

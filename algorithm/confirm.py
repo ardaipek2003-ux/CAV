@@ -3,6 +3,7 @@ Confirm endpoint — commits an order by reserving spots, creating plants, and q
 """
 
 import os
+import uuid
 from datetime import datetime, timedelta, timezone
 from fastapi import APIRouter, Request, HTTPException
 from pydantic import BaseModel
@@ -15,7 +16,6 @@ TOMATO_BASELINE_DAYS = int(os.getenv("TOMATO_BASELINE_DAYS", "60"))
 
 class ConfirmRequest(BaseModel):
     order_id: str
-    proposed_spots: list[dict]
     buyer_id: str
 
 
@@ -51,68 +51,63 @@ async def confirm(body: ConfirmRequest, request: Request):
             raise HTTPException(status_code=409, detail="Order already confirmed")
 
         crop_type = order["crop_type"]
+        spots_needed = order["spots_needed"]
         baseline_days = get_baseline_days(crop_type)
         now = datetime.utcnow()
 
         # Begin transaction
         async with conn.transaction():
+            # 1. Fetch and lock spots_needed EMPTY spots
+            spots = await conn.fetch("""
+                SELECT id, growth_multiplier 
+                FROM spots 
+                WHERE status = 'EMPTY' 
+                ORDER BY module_number, row_number, spot_number 
+                LIMIT $1 
+                FOR UPDATE SKIP LOCKED
+            """, spots_needed)
+
+            if len(spots) < spots_needed:
+                raise HTTPException(status_code=409, detail="Not enough empty spots available. Please request a new quote.")
+
             max_harvest = now
-            plant_ids = []
+            
+            plant_records = []
+            robot_records = []
+            spot_ids = []
+            spot_updates = []
 
-            for spot_data in body.proposed_spots:
-                spot_id = spot_data["spotId"]
-                growth_multiplier = spot_data.get("growthMultiplier", 1.0)
-
-                # Verify spot is still empty
-                spot = await conn.fetchrow(
-                    "SELECT id, status, growth_multiplier FROM spots WHERE id = $1 FOR UPDATE",
-                    spot_id,
-                )
-
-                if not spot or spot["status"] != "EMPTY":
-                    raise HTTPException(
-                        status_code=409,
-                        detail=f"Spot {spot_id} is no longer available. Please request a new quote.",
-                    )
-
-                # Compute expected harvest
+            for spot in spots:
+                spot_id = spot["id"]
+                spot_ids.append(spot_id)
                 actual_days = baseline_days / spot["growth_multiplier"]
                 expected_harvest = now + timedelta(days=actual_days)
                 if expected_harvest > max_harvest:
                     max_harvest = expected_harvest
 
-                # Create plant
-                plant_id = await conn.fetchval(
-                    """
-                    INSERT INTO plants (id, order_id, crop_type, spot_id, planted_at, expected_harvest, status)
-                    VALUES (gen_random_uuid(), $1, $2, $3, $4, $5, 'PLANTED')
-                    RETURNING id
-                    """,
-                    body.order_id,
-                    crop_type,
-                    spot_id,
-                    now,
-                    expected_harvest,
-                )
-                plant_ids.append(str(plant_id))
+                plant_id = str(uuid.uuid4())
+                job_id = str(uuid.uuid4())
+                
+                plant_records.append((plant_id, body.order_id, crop_type, spot_id, now, expected_harvest, 'PLANTED'))
+                robot_records.append((job_id, 'PLANT', plant_id, spot_id, 1, 'QUEUED', now))
+                spot_updates.append((plant_id, spot_id))
 
-                # Mark spot as occupied and link plant
-                await conn.execute(
-                    "UPDATE spots SET status = 'OCCUPIED', plant_id = $1 WHERE id = $2",
-                    plant_id,
-                    spot_id,
-                )
+            # Bulk Insert Plants
+            await conn.executemany("""
+                INSERT INTO plants (id, order_id, crop_type, spot_id, planted_at, expected_harvest, status)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+            """, plant_records)
 
-                # Create robot job for planting
-                await conn.execute(
-                    """
-                    INSERT INTO robot_jobs (id, job_type, plant_id, to_spot_id, priority, status, queued_at)
-                    VALUES (gen_random_uuid(), 'PLANT', $1, $2, 1, 'QUEUED', $3)
-                    """,
-                    plant_id,
-                    spot_id,
-                    now,
-                )
+            # Bulk Update Spots
+            await conn.executemany("""
+                UPDATE spots SET status = 'OCCUPIED', plant_id = $1 WHERE id = $2
+            """, spot_updates)
+
+            # Bulk Insert Robot Jobs
+            await conn.executemany("""
+                INSERT INTO robot_jobs (id, job_type, plant_id, to_spot_id, priority, status, queued_at)
+                VALUES ($1, $2, $3, $4, $5, $6, $7)
+            """, robot_records)
 
             # Update order
             await conn.execute(
@@ -145,5 +140,5 @@ async def confirm(body: ConfirmRequest, request: Request):
         "status": "confirmed",
         "orderId": body.order_id,
         "harvestDate": max_harvest.isoformat(),
-        "plantsCreated": len(plant_ids),
+        "plantsCreated": len(spot_ids),
     }

@@ -28,7 +28,7 @@ class QuoteResponse(BaseModel):
     orderId: str
     deliveryDate: str
     spotsNeeded: int
-    proposedSpots: list[dict]
+    modulesUsed: int
 
 
 def get_baseline_days(crop_type: str) -> int:
@@ -112,7 +112,7 @@ async def quote(body: QuoteRequest, request: Request):
             module_spots.append(spot)
 
         # 3. Compute projected harvest for each selected spot
-        now = datetime.now(timezone.utc)
+        now = datetime.utcnow()
         proposed_spots = []
         max_harvest = now
 
@@ -129,7 +129,7 @@ async def quote(body: QuoteRequest, request: Request):
                 "rowNumber": spot["row_number"],
                 "spotNumber": spot["spot_number"],
                 "growthMultiplier": spot["growth_multiplier"],
-                "projectedHarvest": projected_harvest.isoformat(),
+                "projectedHarvest": projected_harvest,
             })
 
         # 4. Relocation simulation — check if swapping to faster empty spots improves max_harvest
@@ -152,7 +152,7 @@ async def quote(body: QuoteRequest, request: Request):
 
                 # Check if this improves the overall max
                 other_max = max(
-                    (datetime.fromisoformat(s["projectedHarvest"])
+                    (s["projectedHarvest"]
                      for i, s in enumerate(proposed_spots) if i != bottleneck_idx),
                     default=now
                 )
@@ -165,7 +165,7 @@ async def quote(body: QuoteRequest, request: Request):
                         "rowNumber": spot["row_number"],
                         "spotNumber": spot["spot_number"],
                         "growthMultiplier": spot["growth_multiplier"],
-                        "projectedHarvest": new_harvest.isoformat(),
+                        "projectedHarvest": new_harvest,
                     }
                     max_harvest = max(new_harvest, other_max)
 
@@ -187,9 +187,11 @@ async def quote(body: QuoteRequest, request: Request):
             spots_needed,
         )
 
+        modules_used = len(set(s["moduleNumber"] for s in proposed_spots))
+
         return QuoteResponse(
             orderId=str(order_id),
             deliveryDate=max_harvest.isoformat(),
             spotsNeeded=spots_needed,
-            proposedSpots=proposed_spots,
+            modulesUsed=modules_used,
         )
