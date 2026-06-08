@@ -1,0 +1,1 @@
+rediss://default:gQAAAAAAAdApAAIgcDE0YjdhNmRmMGY0NGQ0YTgyYTA1YjljNGM5ZTQzMTM4Nw@vital-haddock-118825.upstash.io:6379
