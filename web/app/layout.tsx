@@ -1,11 +1,18 @@
 import type { Metadata } from 'next';
-import { Outfit } from 'next/font/google';
+import { Outfit, Inter } from 'next/font/google';
 import './globals.css';
 import Providers from './providers';
 
 const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-outfit',
+  display: 'swap',
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
@@ -21,7 +28,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="dark">
-      <body className={`${outfit.variable} font-sans antialiased bg-[#0A0D14] text-gray-100 min-h-screen selection:bg-emerald-500/30`}>
+      <body className={`${outfit.variable} ${inter.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>
     </html>

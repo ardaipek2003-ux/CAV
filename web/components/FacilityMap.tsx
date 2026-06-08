@@ -44,10 +44,10 @@ export default function FacilityMap({ orderId }: FacilityMapProps) {
 
   const getColor = (status: string) => {
     switch (status) {
-      case 'buyer': return '#3b82f6'; // blue
-      case 'other': return '#22c55e'; // green
-      case 'empty': return '#1f2937'; // dark gray
-      default: return '#1f2937';
+      case 'buyer': return '#60A5FA';
+      case 'other': return '#34D399';
+      case 'empty': return '#1E2538';
+      default: return '#1E2538';
     }
   };
 
@@ -88,8 +88,8 @@ export default function FacilityMap({ orderId }: FacilityMapProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64 bg-gray-900/50 rounded-xl">
-        <div className="animate-spin w-8 h-8 border-2 border-green-500 border-t-transparent rounded-full" />
+      <div className="flex items-center justify-center h-64 bg-[#111827]/50 rounded-xl">
+        <div className="animate-spin w-7 h-7 border-2 border-emerald-500 border-t-transparent rounded-full" />
       </div>
     );
   }
@@ -105,35 +105,35 @@ export default function FacilityMap({ orderId }: FacilityMapProps) {
     <div>
       {/* Map controls */}
       <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-4 text-xs">
+        <div className="flex items-center gap-5 text-xs">
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm bg-blue-500" />
-            <span className="text-gray-400">Your plants</span>
+            <div className="w-2.5 h-2.5 rounded-sm bg-blue-400" />
+            <span className="text-slate-500">Your plants</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm bg-green-500" />
-            <span className="text-gray-400">Other orders</span>
+            <div className="w-2.5 h-2.5 rounded-sm bg-emerald-400" />
+            <span className="text-slate-500">Other orders</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-3 h-3 rounded-sm bg-gray-700" />
-            <span className="text-gray-400">Empty</span>
+            <div className="w-2.5 h-2.5 rounded-sm bg-[#1E2538]" />
+            <span className="text-slate-500">Empty</span>
           </div>
         </div>
         <div className="flex items-center gap-2">
           <button
             onClick={() => setTransform({ x: 0, y: 0, scale: 1 })}
-            className="text-xs text-gray-400 hover:text-white px-2 py-1 rounded bg-gray-800/50 transition-colors"
+            className="text-xs text-slate-500 hover:text-slate-300 px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] transition-colors"
           >
             Reset View
           </button>
-          <span className="text-xs text-gray-500">{Math.round(transform.scale * 100)}%</span>
+          <span className="text-xs text-slate-600">{Math.round(transform.scale * 100)}%</span>
         </div>
       </div>
 
       {/* SVG Canvas */}
       <div
         ref={containerRef}
-        className="relative overflow-hidden rounded-xl bg-gray-950 border border-gray-800/50"
+        className="relative overflow-hidden rounded-xl bg-[#0A0D14] border border-white/[0.04]"
         style={{ height: 400, cursor: isPanning.current ? 'grabbing' : 'grab' }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
