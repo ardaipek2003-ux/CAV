@@ -12,9 +12,9 @@ export default async function Home() {
     <div className="min-h-screen" style={{ background: '#FAFAF8', color: '#0A0A0A' }}>
 
       {/* ─── NAV ─── */}
-      <nav style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', background: '#1A3A2A' }} className="sticky top-0 z-50">
-        <div className="max-w-[1360px] mx-auto px-8 flex items-center justify-between h-20">
-          <Link href="/" className="flex items-center -my-2">
+      <nav style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', background: 'rgba(26, 58, 42, 0.85)' }} className="sticky top-0 z-50 backdrop-blur-md">
+        <div className="max-w-[1360px] mx-auto px-8 flex items-center justify-between h-28">
+          <Link href="/" className="flex items-center">
             <Image src="/logo.png" alt="CAV Farming Technologies" width={132} height={84} className="object-contain" />
           </Link>
           <div className="flex items-center gap-2">
