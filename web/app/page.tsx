@@ -278,10 +278,10 @@ export default async function Home() {
       </section>
 
       {/* ─── FOOTER ─── */}
-      <footer style={{ borderTop: '1px solid rgba(10,10,10,0.06)' }} className="py-8">
+      <footer style={{ background: '#1A3A2A', borderTop: '1px solid rgba(255,255,255,0.05)' }} className="py-8">
         <div className="max-w-[1360px] mx-auto px-8 flex items-center justify-between">
-          <Image src="/logo.png" alt="CAV" width={80} height={50} className="object-contain opacity-50" style={{ filter: 'brightness(0)' }} />
-          <div className="flex items-center gap-6 text-xs" style={{ color: 'rgba(10,10,10,0.35)' }}>
+          <Image src="/logo.png" alt="CAV" width={80} height={50} className="object-contain opacity-90" />
+          <div className="flex items-center gap-6 text-xs font-medium" style={{ color: 'rgba(255,255,255,0.5)' }}>
             <span>Cultura Ad Verticem</span>
             <span>© 2026</span>
           </div>
