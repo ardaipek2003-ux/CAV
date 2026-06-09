@@ -44,10 +44,10 @@ export default function FacilityMap({ orderId }: FacilityMapProps) {
 
   const getColor = (status: string) => {
     switch (status) {
-      case 'buyer': return '#60A5FA';
-      case 'other': return '#34D399';
-      case 'empty': return '#1E2538';
-      default: return '#1E2538';
+      case 'buyer': return '#1A3A2A';  // dark forest green — your plants
+      case 'other': return '#86EFAC';  // soft green — other orders
+      case 'empty': return '#E8E6E0';  // warm gray — empty
+      default: return '#E8E6E0';
     }
   };
 
@@ -88,8 +88,8 @@ export default function FacilityMap({ orderId }: FacilityMapProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-64 bg-[#111827]/50 rounded-xl">
-        <div className="animate-spin w-7 h-7 border-2 border-emerald-500 border-t-transparent rounded-full" />
+      <div className="flex items-center justify-center h-64 rounded-xl" style={{ background: '#F3F2EE', border: '1px solid rgba(10,10,10,0.08)' }}>
+        <div className="animate-spin w-6 h-6 border-2 border-t-transparent rounded-full" style={{ borderColor: '#1A3A2A', borderTopColor: 'transparent' }} />
       </div>
     );
   }
@@ -104,37 +104,37 @@ export default function FacilityMap({ orderId }: FacilityMapProps) {
   return (
     <div>
       {/* Map controls */}
-      <div className="flex items-center justify-between mb-4">
-        <div className="flex items-center gap-5 text-xs">
+      <div className="flex items-center justify-between mb-3">
+        <div className="flex items-center gap-5" style={{ fontSize: '0.6875rem' }}>
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-blue-400" />
-            <span className="text-slate-500">Your plants</span>
+            <div className="w-2.5 h-2.5 rounded-sm" style={{ background: '#1A3A2A' }} />
+            <span style={{ color: '#8A8A8A', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Your plants</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-emerald-400" />
-            <span className="text-slate-500">Other orders</span>
+            <div className="w-2.5 h-2.5 rounded-sm" style={{ background: '#86EFAC' }} />
+            <span style={{ color: '#8A8A8A', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Other orders</span>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-2.5 h-2.5 rounded-sm bg-[#1E2538]" />
-            <span className="text-slate-500">Empty</span>
+            <div className="w-2.5 h-2.5 rounded-sm" style={{ background: '#E8E6E0', border: '1px solid rgba(10,10,10,0.1)' }} />
+            <span style={{ color: '#8A8A8A', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase' }}>Empty</span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-3">
           <button
             onClick={() => setTransform({ x: 0, y: 0, scale: 1 })}
-            className="text-xs text-slate-500 hover:text-slate-300 px-2.5 py-1 rounded-md bg-white/[0.04] border border-white/[0.06] transition-colors"
+            style={{ fontSize: '0.6875rem', color: '#5A5A5A', background: '#F3F2EE', border: '1px solid rgba(10,10,10,0.1)', padding: '4px 10px', borderRadius: 6 }}
           >
-            Reset View
+            Reset
           </button>
-          <span className="text-xs text-slate-600">{Math.round(transform.scale * 100)}%</span>
+          <span style={{ fontSize: '0.6875rem', color: '#8A8A8A', fontWeight: 600 }}>{Math.round(transform.scale * 100)}%</span>
         </div>
       </div>
 
       {/* SVG Canvas */}
       <div
         ref={containerRef}
-        className="relative overflow-hidden rounded-xl bg-[#0A0D14] border border-white/[0.04]"
-        style={{ height: 400, cursor: isPanning.current ? 'grabbing' : 'grab' }}
+        className="relative overflow-hidden rounded-xl"
+        style={{ height: 400, cursor: isPanning.current ? 'grabbing' : 'grab', background: '#F7F6F2', border: '1px solid rgba(10,10,10,0.08)' }}
         onMouseDown={handleMouseDown}
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}

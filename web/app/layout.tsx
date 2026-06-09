@@ -7,6 +7,7 @@ const outfit = Outfit({
   subsets: ['latin'],
   variable: '--font-outfit',
   display: 'swap',
+  weight: ['400','500','600','700','800'],
 });
 
 const inter = Inter({
@@ -27,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en">
       <body className={`${outfit.variable} ${inter.variable} antialiased`}>
         <Providers>{children}</Providers>
       </body>

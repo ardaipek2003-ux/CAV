@@ -18,30 +18,17 @@ export default function RegisterPage() {
     e.preventDefault();
     setError('');
     setLoading(true);
-
     try {
       const res = await fetch('/api/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ name, email, password }),
       });
-
       const data = await res.json();
-
-      if (!res.ok) {
-        setError(data.error || 'Registration failed');
-        setLoading(false);
-        return;
-      }
-
-      const signInResult = await signIn('credentials', {
-        email,
-        password,
-        redirect: false,
-      });
-
+      if (!res.ok) { setError(data.error || 'Registration failed'); setLoading(false); return; }
+      const signInResult = await signIn('credentials', { email, password, redirect: false });
       if (signInResult?.error) {
-        setError('Registered successfully, but failed to sign in automatically.');
+        setError('Registered, but failed to sign in automatically.');
       } else {
         router.push('/dashboard');
         router.refresh();
@@ -54,125 +41,121 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* Left: Brand Panel */}
-      <div className="hidden lg:flex lg:w-[45%] relative overflow-hidden flex-col justify-between p-12">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#0C0F17] via-[#111827] to-[#0C0F17]" />
-        <div className="absolute top-[20%] right-[20%] w-[400px] h-[400px] bg-violet-500/[0.06] rounded-full blur-[140px]" />
-        <div className="absolute bottom-[30%] left-[10%] w-[300px] h-[300px] bg-emerald-500/[0.06] rounded-full blur-[120px]" />
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(52,211,153,0.015)_1px,transparent_1px),linear-gradient(90deg,rgba(52,211,153,0.015)_1px,transparent_1px)] bg-[size:48px_48px]" />
+    <div className="min-h-screen flex" style={{ background: '#FAFAF8' }}>
+
+      {/* Left — decorative panel */}
+      <div className="hidden lg:flex lg:w-[42%] relative overflow-hidden flex-col justify-between p-12"
+           style={{ background: '#1A3A2A' }}>
         
+        {/* Hatch texture */}
+        <div className="absolute inset-0 hatch-bg opacity-30" />
+        
+        {/* Large decorative number */}
+        <div className="absolute bottom-[-10px] right-[-30px] leading-none font-black select-none"
+             style={{ fontSize: 260, color: 'rgba(255,255,255,0.04)', fontFamily: 'var(--font-outfit)', letterSpacing: '-0.05em', lineHeight: 1 }}>
+          10K
+        </div>
+
         <div className="relative z-10">
           <Link href="/">
-            <Image src="/logo.png" alt="CAV" width={120} height={75} className="object-contain" />
+            <Image src="/logo.png" alt="CAV" width={110} height={70} className="object-contain brightness-0 invert" />
           </Link>
         </div>
 
-        <div className="relative z-10 max-w-md">
-          <h2 className="text-3xl font-bold tracking-[-0.02em] text-slate-100 mb-4 leading-tight">
-            Start growing<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-purple-400">with precision.</span>
+        <div className="relative z-10">
+          <div className="h-px w-10 mb-8" style={{ background: 'rgba(255,255,255,0.3)' }} />
+          <h2 className="heading-display text-white mb-4" style={{ fontSize: '2.25rem', lineHeight: 1.1 }}>
+            Grow with<br/>
+            <span style={{ color: '#86EFAC' }}>precision.</span>
           </h2>
-          <p className="text-slate-500 leading-relaxed">
-            Create your account and place your first order in minutes. Fresh produce, delivered at peak perfection.
+          <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '0.9375rem', lineHeight: 1.6, maxWidth: 300 }}>
+            Join CAV and place your first order in minutes. Fresh produce, delivered at peak nutrition.
           </p>
+          <div className="mt-8 flex items-center gap-4">
+            {[{ n: '10K', l: 'Modules' }, { n: '27d', l: 'Harvest' }].map(({n,l}) => (
+              <div key={l}>
+                <div className="text-white font-bold text-xl" style={{ fontFamily: 'var(--font-outfit)', letterSpacing: '-0.03em' }}>{n}</div>
+                <div className="text-xs uppercase tracking-wider font-medium" style={{ color: 'rgba(255,255,255,0.4)' }}>{l}</div>
+              </div>
+            ))}
+          </div>
         </div>
 
-        <div className="relative z-10 text-xs text-slate-600">
+        <div className="relative z-10 text-xs" style={{ color: 'rgba(255,255,255,0.2)' }}>
           © 2026 CAV Farming Technologies
         </div>
       </div>
 
-      {/* Right: Form */}
-      <div className="flex-1 flex items-center justify-center px-6 py-12 bg-[#0C0F17]">
-        <div className="w-full max-w-sm fade-in">
-          {/* Mobile Logo */}
-          <div className="flex items-center justify-center mb-10 lg:hidden">
+      {/* Right — form */}
+      <div className="flex-1 flex items-center justify-center px-6 py-16">
+        <div className="w-full max-w-[380px] fade-in">
+          
+          {/* Mobile logo */}
+          <div className="lg:hidden mb-12 flex justify-center">
             <Link href="/">
-              <Image src="/logo.png" alt="CAV" width={140} height={88} className="object-contain" />
+              <Image src="/logo.png" alt="CAV" width={120} height={76} className="object-contain" />
             </Link>
           </div>
 
-          <h1 className="text-2xl font-bold tracking-[-0.02em] mb-2">Create your account</h1>
-          <p className="text-slate-500 text-sm mb-8">
-            Start ordering fresh produce today
-          </p>
+          <div className="mb-8">
+            <h1 className="text-2xl font-bold mb-1" style={{ color: '#0A0A0A', letterSpacing: '-0.03em' }}>
+              Create your account
+            </h1>
+            <p style={{ color: '#8A8A8A', fontSize: '0.875rem' }}>
+              Start ordering fresh produce today
+            </p>
+          </div>
 
           {error && (
-            <div className="mb-6 p-3 rounded-xl bg-red-500/[0.06] border border-red-500/[0.12] text-red-400 text-sm text-center">
+            <div className="mb-6 px-4 py-3 rounded-lg text-sm" 
+                 style={{ background: '#FEF2F2', border: '1px solid #FECACA', color: '#991B1B' }}>
               {error}
             </div>
           )}
 
-          <form onSubmit={handleSubmit} className="space-y-5">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-slate-400 mb-1.5">
-                Full Name
+              <label htmlFor="name" className="block mb-1.5 text-sm font-medium" style={{ color: '#2A2A2A' }}>
+                Full name
               </label>
-              <input
-                id="name"
-                type="text"
-                value={name}
-                onChange={(e) => setName(e.target.value)}
-                className="input-field"
-                placeholder="Jane Doe"
-                required
-              />
+              <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)}
+                className="input-field" placeholder="Jane Doe" required />
             </div>
             <div>
-              <label htmlFor="email" className="block text-sm font-medium text-slate-400 mb-1.5">
-                Email
+              <label htmlFor="email" className="block mb-1.5 text-sm font-medium" style={{ color: '#2A2A2A' }}>
+                Email address
               </label>
-              <input
-                id="email"
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="input-field"
-                placeholder="you@example.com"
-                required
-              />
+              <input id="email" type="email" value={email} onChange={(e) => setEmail(e.target.value)}
+                className="input-field" placeholder="you@example.com" required />
             </div>
             <div>
-              <label htmlFor="password" className="block text-sm font-medium text-slate-400 mb-1.5">
+              <label htmlFor="password" className="block mb-1.5 text-sm font-medium" style={{ color: '#2A2A2A' }}>
                 Password
               </label>
-              <input
-                id="password"
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="input-field"
-                placeholder="At least 6 characters"
-                minLength={6}
-                required
-              />
+              <input id="password" type="password" value={password} onChange={(e) => setPassword(e.target.value)}
+                className="input-field" placeholder="At least 6 characters" minLength={6} required />
             </div>
-            <button
-              type="submit"
-              disabled={loading}
-              className="btn-primary w-full py-3 text-center disabled:opacity-50 disabled:cursor-not-allowed"
-            >
+            <button type="submit" disabled={loading}
+              className="w-full py-3 mt-2 rounded-lg font-semibold text-sm disabled:opacity-50 disabled:cursor-not-allowed transition-all"
+              style={{ background: '#1A3A2A', color: 'white' }}>
               {loading ? (
                 <span className="flex items-center justify-center gap-2">
                   <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
-                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" />
-                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                    <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                    <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
                   </svg>
                   Creating account...
                 </span>
-              ) : (
-                'Create account'
-              )}
+              ) : 'Create account'}
             </button>
           </form>
 
-          <p className="mt-8 text-center text-sm text-slate-500">
+          <div className="mt-6 text-center text-sm" style={{ color: '#8A8A8A' }}>
             Already have an account?{' '}
-            <Link href="/login" className="text-emerald-400 hover:text-emerald-300 font-medium transition-colors">
+            <Link href="/login" className="font-semibold" style={{ color: '#1A3A2A' }}>
               Sign in
             </Link>
-          </p>
+          </div>
         </div>
       </div>
     </div>

@@ -6,310 +6,278 @@ import { redirect } from 'next/navigation';
 
 export default async function Home() {
   const session = await getServerSession(authOptions);
-  if (session) {
-    redirect('/dashboard');
-  }
+  if (session) redirect('/dashboard');
 
   return (
-    <div className="min-h-screen text-white overflow-hidden">
+    <div className="min-h-screen" style={{ background: '#FAFAF8', color: '#0A0A0A' }}>
 
-      {/* ─── Ambient Background ─── */}
-      <div className="fixed inset-0 pointer-events-none z-0">
-        <div className="absolute inset-0 bg-[linear-gradient(rgba(52,211,153,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(52,211,153,0.02)_1px,transparent_1px)] bg-[size:72px_72px]" />
-        <div className="absolute top-[-20%] left-[-10%] w-[700px] h-[700px] rounded-full bg-emerald-500/[0.04] blur-[180px] animate-orb-1" />
-        <div className="absolute bottom-[-20%] right-[-10%] w-[600px] h-[600px] rounded-full bg-violet-500/[0.05] blur-[180px] animate-orb-2" />
-        <div className="absolute top-[40%] left-[55%] w-[400px] h-[400px] rounded-full bg-emerald-500/[0.03] blur-[140px] animate-orb-3" />
-      </div>
-
-      {/* ─── Navigation ─── */}
-      <nav className="relative z-50 flex items-center justify-between px-8 lg:px-16 py-5 max-w-[1400px] mx-auto">
-        <Link href="/" className="flex items-center group">
-          <div className="transition-all duration-500 rounded-xl">
-            <Image src="/logo.png" alt="CAV Farming Technologies" width={140} height={88} className="object-contain" />
+      {/* ─── NAV ─── */}
+      <nav style={{ borderBottom: '1px solid rgba(10,10,10,0.06)' }} className="sticky top-0 z-50 backdrop-blur-sm" 
+           css-bg="rgba(250,250,248,0.95)">
+        <div className="max-w-[1360px] mx-auto px-8 flex items-center justify-between h-16">
+          <Link href="/" className="flex items-center">
+            <Image src="/logo.png" alt="CAV Farming Technologies" width={110} height={70} className="object-contain" />
+          </Link>
+          <div className="flex items-center gap-2">
+            <Link href="/login" className="btn-ghost text-sm">
+              Sign in
+            </Link>
+            <Link href="/register" className="btn-primary text-sm">
+              Get started
+            </Link>
           </div>
-        </Link>
-        <div className="flex items-center gap-3">
-          <Link href="/login" className="px-5 py-2.5 text-sm font-medium text-slate-400 hover:text-white transition-colors rounded-lg hover:bg-white/[0.04]">
-            Sign In
-          </Link>
-          <Link href="/register" className="px-6 py-2.5 text-sm font-semibold bg-gradient-to-r from-emerald-400 to-emerald-500 text-[#0C0F17] rounded-lg hover:from-emerald-300 hover:to-emerald-400 transition-all duration-300 shadow-[0_2px_16px_rgba(52,211,153,0.25)]">
-            Get Started
-          </Link>
         </div>
       </nav>
 
       {/* ─── HERO ─── */}
-      <section className="relative z-10 max-w-[1400px] mx-auto px-8 lg:px-16 pt-20 pb-32">
-        <div className="grid lg:grid-cols-2 gap-20 items-center min-h-[65vh]">
-          
-          {/* Left */}
-          <div className="fade-up">
-            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-emerald-500/15 bg-emerald-500/[0.05] mb-8">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-emerald-400"></span>
-              </span>
-              <span className="text-emerald-400 text-xs font-medium tracking-wide">AI-Powered Vertical Farming</span>
-            </div>
+      <section className="max-w-[1360px] mx-auto px-8 pt-20 pb-12">
+        
+        {/* Top label */}
+        <div className="flex items-center gap-3 mb-10 fade-in">
+          <div className="h-px w-8" style={{ background: '#1A3A2A' }} />
+          <span className="label" style={{ color: '#1A3A2A' }}>Vertical Farming · AI-Optimized</span>
+        </div>
 
-            <h1 className="text-[clamp(2.75rem,5.5vw,5rem)] font-bold leading-[1.05] tracking-[-0.03em] mb-8">
-              <span className="block text-slate-100">Cultivation</span>
-              <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-emerald-300 to-teal-400">Towards</span>
-              <span className="block mt-1 text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-violet-300">the Peak.</span>
-            </h1>
+        {/* Massive heading */}
+        <div className="fade-in" style={{animationDelay: '0.05s'}}>
+          <h1 className="heading-display text-[clamp(4rem,10vw,10rem)] leading-none mb-2" 
+              style={{ color: '#0A0A0A', fontWeight: 800, letterSpacing: '-0.04em' }}>
+            CULTURA
+          </h1>
+          <h1 className="heading-display text-[clamp(4rem,10vw,10rem)] leading-none mb-2"
+              style={{ color: '#0A0A0A', fontWeight: 800, letterSpacing: '-0.04em', WebkitTextStroke: '2px #0A0A0A', WebkitTextFillColor: 'transparent' }}>
+            AD
+          </h1>
+          <h1 className="heading-display text-[clamp(4rem,10vw,10rem)] leading-none mb-12"
+              style={{ color: '#1A3A2A', fontWeight: 800, letterSpacing: '-0.04em' }}>
+            VERTICEM
+          </h1>
+        </div>
 
-            <p className="text-lg text-slate-400 leading-relaxed max-w-lg mb-10 font-light">
-              Architecting the future of agriculture. Our AI-orchestrated vertical farm grows 
-              precision crops across <span className="text-slate-200 font-normal">10,000 modules</span>, delivering 
-              at peak perfection.
+        {/* Sub-row: description + CTA */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-end fade-in" style={{animationDelay: '0.1s'}}>
+          <div>
+            <p className="text-xl leading-relaxed max-w-lg" style={{ color: '#5A5A5A', fontWeight: 400 }}>
+              AI-orchestrated vertical farming across 10,000 modules. 
+              Order precision-grown lettuce and tomatoes, 
+              delivered at peak perfection.
             </p>
-
-            <div className="flex flex-wrap items-center gap-4 mb-14">
-              <Link href="/register" className="group relative px-8 py-4 text-sm font-semibold bg-gradient-to-r from-emerald-400 to-emerald-500 text-[#0C0F17] rounded-xl overflow-hidden transition-all duration-300 hover:scale-[1.02] shadow-[0_4px_24px_rgba(52,211,153,0.25)]">
-                <span className="relative z-10">Begin Cultivation</span>
-                <div className="absolute inset-0 bg-gradient-to-r from-emerald-300 to-emerald-400 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </Link>
-              <Link href="/login" className="group flex items-center gap-2 px-8 py-4 text-sm font-medium text-slate-300 rounded-xl border border-white/[0.08] hover:border-white/[0.15] hover:bg-white/[0.03] transition-all duration-300">
-                <span>Enter Dashboard</span>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="group-hover:translate-x-0.5 transition-transform"><path d="m9 18 6-6-6-6"/></svg>
-              </Link>
-            </div>
-
-            {/* Stats */}
-            <div className="flex items-center gap-8 pt-8 border-t border-white/[0.05]">
-              <div>
-                <div className="text-2xl font-bold text-slate-100 tracking-tight">450K</div>
-                <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5 font-medium">Plant Spots</div>
-              </div>
-              <div className="w-px h-8 bg-white/[0.06]" />
-              <div>
-                <div className="text-2xl font-bold text-slate-100 tracking-tight">10K</div>
-                <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5 font-medium">Modules</div>
-              </div>
-              <div className="w-px h-8 bg-white/[0.06]" />
-              <div>
-                <div className="text-2xl font-bold text-emerald-400 tracking-tight">27d</div>
-                <div className="text-[11px] text-slate-500 uppercase tracking-widest mt-0.5 font-medium">Min Harvest</div>
-              </div>
-            </div>
           </div>
+          <div className="flex items-center gap-4 lg:justify-end">
+            <Link href="/register" className="btn-green" style={{ padding: '0.875rem 2rem', fontSize: '0.9375rem' }}>
+              Begin Cultivation
+            </Link>
+            <Link href="/login" className="btn-outline" style={{ padding: '0.875rem 2rem', fontSize: '0.9375rem' }}>
+              Sign in
+            </Link>
+          </div>
+        </div>
+      </section>
 
-          {/* Right: Hero Image */}
-          <div className="relative fade-up hidden lg:block" style={{animationDelay: '0.15s'}}>
-            <div className="absolute -inset-10 bg-gradient-to-br from-emerald-500/10 via-transparent to-violet-500/10 rounded-[48px] blur-3xl opacity-50 animate-orb-3" />
-            <div className="relative rounded-[28px] overflow-hidden border border-white/[0.06] shadow-2xl shadow-black/40">
-              <Image 
-                src="/hero-bg.png" 
-                alt="CAV Vertical Farm — Precision Growing Modules" 
-                width={800} 
-                height={600} 
-                className="object-cover w-full h-[500px]"
-                priority
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-[#0C0F17] via-transparent to-transparent opacity-70" />
-              <div className="absolute inset-0 bg-gradient-to-l from-transparent to-[#0C0F17]/20" />
-              
-              {/* Floating Card */}
-              <div className="absolute bottom-6 left-6 right-6 p-4 rounded-2xl bg-black/30 backdrop-blur-2xl border border-white/[0.08]">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-emerald-500/15 flex items-center justify-center">
-                      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="2"><path d="M22 12h-2.48a2 2 0 0 0-1.93 1.46l-2.35 8.36a.25.25 0 0 1-.48 0L9.24 2.18a.25.25 0 0 0-.48 0l-2.35 8.36A2 2 0 0 1 4.49 12H2"/></svg>
-                    </div>
-                    <div>
-                      <div className="text-sm font-medium text-slate-200">Growth Cycle Active</div>
-                      <div className="text-xs text-slate-500">Module #7,841 — Lettuce Batch</div>
-                    </div>
-                  </div>
-                  <div className="flex items-center gap-1.5">
-                    <div className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                    <span className="text-[10px] font-semibold text-emerald-400 tracking-wider">LIVE</span>
-                  </div>
+      {/* ─── HERO IMAGE — full bleed ─── */}
+      <section className="fade-in" style={{animationDelay: '0.15s'}}>
+        <div className="max-w-[1360px] mx-auto px-8 mb-4">
+          <div className="relative overflow-hidden rounded-2xl" 
+               style={{ aspectRatio: '16/7', background: '#0A0A0A' }}>
+            <Image 
+              src="/hero-bg.png" 
+              alt="CAV Vertical Farm Facility" 
+              fill
+              className="object-cover opacity-80"
+              priority
+            />
+            {/* Overlay grid rule on top of image */}
+            <div className="absolute inset-0" 
+                 style={{ background: 'linear-gradient(to bottom, transparent 50%, rgba(10,10,10,0.4) 100%)' }} />
+            
+            {/* Bottom-left live chip */}
+            <div className="absolute bottom-6 left-6 flex items-center gap-2 px-4 py-2 rounded-full"
+                 style={{ background: 'rgba(255,255,255,0.12)', backdropFilter: 'blur(12px)', border: '1px solid rgba(255,255,255,0.15)' }}>
+              <span className="relative flex h-2 w-2">
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full opacity-75"
+                      style={{ background: '#4ADE80' }} />
+                <span className="relative inline-flex rounded-full h-2 w-2" style={{ background: '#4ADE80' }} />
+              </span>
+              <span className="text-white text-xs font-medium tracking-wide">
+                10,000 modules growing live
+              </span>
+            </div>
+            
+            {/* Stats overlay bottom-right */}
+            <div className="absolute bottom-6 right-6 flex items-center gap-6">
+              {[
+                { n: '450K', l: 'Plant Spots' },
+                { n: '27d', l: 'Min Harvest' },
+              ].map(({ n, l }) => (
+                <div key={l} className="text-right">
+                  <div className="text-white font-bold text-2xl tracking-tight" style={{ fontFamily: 'var(--font-outfit)' }}>{n}</div>
+                  <div className="text-white/50 text-[10px] uppercase tracking-wider font-medium">{l}</div>
                 </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>
       </section>
 
-      {/* ─── MARQUEE ─── */}
-      <div className="relative z-10 border-y border-white/[0.03] py-5 overflow-hidden">
-        <div className="marquee-track flex items-center gap-16 whitespace-nowrap text-sm font-medium text-slate-600 tracking-wide">
-          <span>AI-OPTIMIZED GROWTH</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>PRECISION LETTUCE</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>HYDROPONIC TOMATOES</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>AUTONOMOUS RELOCATION</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>REAL-TIME TRACKING</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>27-DAY HARVEST CYCLE</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>AI-OPTIMIZED GROWTH</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>PRECISION LETTUCE</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>HYDROPONIC TOMATOES</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>AUTONOMOUS RELOCATION</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>REAL-TIME TRACKING</span>
-          <span className="text-emerald-500/20">◆</span>
-          <span>27-DAY HARVEST CYCLE</span>
+      {/* ─── MARQUEE TICKER ─── */}
+      <div className="overflow-hidden py-4 mb-0" style={{ borderTop: '1px solid rgba(10,10,10,0.06)', borderBottom: '1px solid rgba(10,10,10,0.06)' }}>
+        <div className="marquee-track gap-14 text-xs font-semibold tracking-[0.15em] uppercase" style={{ color: 'rgba(10,10,10,0.3)' }}>
+          {['AI-Optimized Growth', 'Precision Lettuce', 'Hydroponic Tomatoes', 'Autonomous Relocation', 'Real-Time Tracking', '27-Day Harvest Cycle',
+            'AI-Optimized Growth', 'Precision Lettuce', 'Hydroponic Tomatoes', 'Autonomous Relocation', 'Real-Time Tracking', '27-Day Harvest Cycle'].map((s, i) => (
+            <span key={i} className="flex items-center gap-14">
+              <span>{s}</span>
+              {i < 11 && <span style={{ color: 'rgba(10,10,10,0.12)' }}>—</span>}
+            </span>
+          ))}
         </div>
       </div>
 
       {/* ─── HOW IT WORKS ─── */}
-      <section className="relative z-10 max-w-[1400px] mx-auto px-8 lg:px-16 py-32">
-        <div className="text-center mb-20 fade-up">
-          <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-white/[0.06] bg-white/[0.02] text-slate-500 text-xs font-medium uppercase tracking-[0.15em] mb-6">
-            How It Works
-          </div>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-[-0.03em]">
-            From Seed to <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-teal-400">Delivery</span>
-          </h2>
-        </div>
-
-        <div className="grid md:grid-cols-3 gap-0 stagger">
-          {/* Step 1 */}
-          <div className="relative p-10 group">
-            <div className="absolute top-0 right-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/[0.06] to-transparent hidden md:block" />
-            <div className="text-[72px] font-black text-white/[0.02] leading-none absolute top-4 right-6 select-none">01</div>
-            <div className="relative">
-              <div className="w-12 h-12 rounded-xl bg-emerald-500/[0.08] border border-emerald-500/[0.12] flex items-center justify-center mb-6 group-hover:bg-emerald-500/[0.12] group-hover:shadow-[0_0_24px_rgba(52,211,153,0.08)] transition-all duration-500">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34D399" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>
-              </div>
-              <h3 className="text-lg font-semibold mb-3 text-slate-200">Define Your Yield</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">
-                Specify the exact kilograms of lettuce or tomatoes you need. Our algorithm allocates optimal grow spots instantly.
-              </p>
+      <section className="max-w-[1360px] mx-auto px-8 py-24">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-start">
+          
+          {/* Left label column */}
+          <div className="lg:col-span-3 fade-in">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="h-px w-6" style={{ background: '#1A3A2A' }} />
+              <span className="label" style={{ color: '#1A3A2A' }}>Process</span>
             </div>
+            <h2 className="heading-display text-4xl" style={{ color: '#0A0A0A' }}>
+              Seed<br/>to<br/>Plate.
+            </h2>
           </div>
 
-          {/* Step 2 */}
-          <div className="relative p-10 group">
-            <div className="absolute top-0 right-0 bottom-0 w-px bg-gradient-to-b from-transparent via-white/[0.06] to-transparent hidden md:block" />
-            <div className="text-[72px] font-black text-white/[0.02] leading-none absolute top-4 right-6 select-none">02</div>
-            <div className="relative">
-              <div className="w-12 h-12 rounded-xl bg-violet-500/[0.08] border border-violet-500/[0.12] flex items-center justify-center mb-6 group-hover:bg-violet-500/[0.12] group-hover:shadow-[0_0_24px_rgba(139,92,246,0.08)] transition-all duration-500">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v4"/><path d="m6.8 15-3.5 2"/><path d="m20.7 7-3.5 2"/><path d="M6.8 9 3.3 7"/><path d="m20.7 17-3.5-2"/><path d="m9 22 3-8 3 8"/><path d="M8 22h8"/><circle cx="12" cy="12" r="2"/></svg>
+          {/* Steps */}
+          <div className="lg:col-span-9 stagger">
+            {[
+              {
+                n: '01',
+                title: 'Define Your Yield',
+                body: 'Specify the exact kilograms of lettuce or tomatoes you need. Our algorithm instantly allocates the optimal grow spots across the facility.',
+                icon: (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 3h12l4 6-10 13L2 9z"/></svg>
+                ),
+              },
+              {
+                n: '02',
+                title: 'AI Cultivates',
+                body: 'Robotic arms relocate your plants overnight to highest-yield modules, accelerating growth by up to 30% through precision light and nutrient exposure.',
+                icon: (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="2"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg>
+                ),
+              },
+              {
+                n: '03',
+                title: 'Harvest & Deliver',
+                body: 'Track your plants in real-time on the facility map. When growth peaks, your produce is harvested at peak nutrition and freshness, then delivered.',
+                icon: (
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
+                ),
+              },
+            ].map((step) => (
+              <div key={step.n} className="flex gap-8 pb-10" 
+                   style={{ borderBottom: '1px solid rgba(10,10,10,0.07)' }}>
+                <div className="w-12 shrink-0 pt-1">
+                  <span className="label text-lg" style={{ color: 'rgba(10,10,10,0.18)', fontWeight: 700, letterSpacing: '0' }}>{step.n}</span>
+                </div>
+                <div className="flex-1">
+                  <div className="flex items-center gap-3 mb-3">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center"
+                         style={{ background: '#F3F2EE', color: '#1A3A2A' }}>
+                      {step.icon}
+                    </div>
+                    <h3 className="font-semibold text-lg" style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}>
+                      {step.title}
+                    </h3>
+                  </div>
+                  <p className="leading-relaxed" style={{ color: '#5A5A5A', fontSize: '0.9375rem' }}>{step.body}</p>
+                </div>
               </div>
-              <h3 className="text-lg font-semibold mb-3 text-slate-200">AI Cultivates</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">
-                Robotic arms relocate your plants overnight to the highest-yield modules, accelerating growth by up to 30%.
-              </p>
-            </div>
-          </div>
-
-          {/* Step 3 */}
-          <div className="relative p-10 group">
-            <div className="text-[72px] font-black text-white/[0.02] leading-none absolute top-4 right-6 select-none">03</div>
-            <div className="relative">
-              <div className="w-12 h-12 rounded-xl bg-amber-500/[0.08] border border-amber-500/[0.12] flex items-center justify-center mb-6 group-hover:bg-amber-500/[0.12] group-hover:shadow-[0_0_24px_rgba(245,158,11,0.08)] transition-all duration-500">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16Z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>
-              </div>
-              <h3 className="text-lg font-semibold mb-3 text-slate-200">Harvest & Deliver</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">
-                Track your order in real-time on the facility map. When ready, your perfectly grown produce is harvested and delivered.
-              </p>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ─── FEATURE BENTO GRID ─── */}
-      <section className="relative z-10 max-w-[1400px] mx-auto px-8 lg:px-16 pb-32">
-        <div className="grid md:grid-cols-12 gap-4 stagger">
+      {/* ─── STATS / FEATURE GRID ─── */}
+      <section className="max-w-[1360px] mx-auto px-8 pb-24">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           
-          {/* Live Facility Map */}
-          <div className="md:col-span-7 group relative rounded-2xl overflow-hidden border border-white/[0.05] bg-gradient-to-br from-[#111827] to-[#0C0F17] p-10 min-h-[360px] flex flex-col justify-end hover:border-emerald-500/20 transition-all duration-500">
-            <div className="absolute inset-0 bg-[linear-gradient(rgba(52,211,153,0.02)_1px,transparent_1px),linear-gradient(90deg,rgba(52,211,153,0.02)_1px,transparent_1px)] bg-[size:28px_28px] opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
-            <div className="absolute top-8 right-8 w-40 h-40 bg-emerald-500/[0.04] rounded-full blur-[80px] group-hover:bg-emerald-500/[0.08] transition-all duration-700" />
-            
-            <div className="absolute top-10 right-10 grid grid-cols-8 gap-1.5 opacity-20 group-hover:opacity-40 transition-opacity duration-700">
-              {Array.from({length: 48}).map((_, i) => (
-                <div key={i} className={`w-1.5 h-1.5 rounded-full ${i % 7 === 0 ? 'bg-emerald-400' : i % 11 === 0 ? 'bg-amber-400' : 'bg-white/15'}`} />
+          {/* Big stat */}
+          <div className="md:col-span-1 card-flat p-10 flex flex-col justify-between" style={{ minHeight: 280 }}>
+            <div className="label" style={{ color: '#1A3A2A' }}>Capacity</div>
+            <div>
+              <div className="heading-display text-7xl md:text-8xl" style={{ color: '#0A0A0A', fontWeight: 800 }}>
+                450<span style={{ color: '#1A3A2A' }}>K</span>
+              </div>
+              <div className="text-sm mt-2" style={{ color: '#8A8A8A' }}>Active plant spots</div>
+            </div>
+          </div>
+
+          {/* Map feature card */}
+          <div className="md:col-span-2 card-flat relative overflow-hidden p-10 flex flex-col justify-between" style={{ minHeight: 280, background: '#1A3A2A' }}>
+            <div className="absolute inset-0 dot-grid opacity-10" />
+            <div className="relative">
+              <span className="label" style={{ color: 'rgba(255,255,255,0.45)' }}>Interactive</span>
+              <h3 className="text-2xl font-bold mt-2 mb-3 text-white" style={{ letterSpacing: '-0.02em' }}>
+                Live Facility Map
+              </h3>
+              <p style={{ color: 'rgba(255,255,255,0.55)', fontSize: '0.9375rem', maxWidth: 380 }}>
+                Watch your plants growing across 10,000 modules in real-time. Zoom into any module, track progress, and see exactly where your crops are.
+              </p>
+            </div>
+            <div className="relative mt-8 grid grid-cols-10 gap-1 opacity-30">
+              {Array.from({ length: 60 }).map((_, i) => (
+                <div key={i} className="h-1.5 rounded-full" style={{ background: i % 7 === 0 ? '#86EFAC' : i % 4 === 0 ? '#4ADE80' : 'rgba(255,255,255,0.2)' }} />
               ))}
             </div>
-            
-            <div className="relative">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/[0.06] border border-emerald-500/[0.1] text-emerald-400 text-[10px] font-semibold uppercase tracking-wider mb-4">
-                Interactive
-              </div>
-              <h3 className="text-xl font-semibold mb-3 text-slate-200">Live Facility Map</h3>
-              <p className="text-slate-500 text-sm max-w-md leading-relaxed">
-                Watch your plants growing across our entire 10,000-module facility in real-time. Zoom into any module, track growth progress, and see exactly where your crops are.
-              </p>
+          </div>
+
+          {/* Fastest harvest */}
+          <div className="card-flat p-10 flex flex-col justify-between" style={{ background: '#0A0A0A' }}>
+            <div className="label" style={{ color: 'rgba(255,255,255,0.3)' }}>Fastest Harvest</div>
+            <div>
+              <div className="heading-display text-7xl" style={{ color: 'white', fontWeight: 800 }}>27</div>
+              <div className="text-2xl font-medium" style={{ color: 'rgba(255,255,255,0.4)', marginTop: -8 }}>days</div>
             </div>
           </div>
 
-          {/* Stat: 450K */}
-          <div className="md:col-span-5 group relative rounded-2xl overflow-hidden border border-white/[0.05] bg-gradient-to-br from-[#111827] to-[#0C0F17] p-10 flex flex-col justify-center items-center text-center hover:border-violet-500/20 transition-all duration-500">
-            <div className="absolute inset-0 bg-gradient-to-br from-violet-500/[0.03] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative">
-              <div className="text-6xl md:text-7xl font-black tracking-tight text-gradient leading-none">450K</div>
-              <div className="mt-3 text-xs uppercase tracking-[0.2em] text-slate-500 font-medium">Active Plant Spots</div>
-              <div className="mt-4 flex items-center justify-center gap-1.5 text-xs text-emerald-400">
-                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="m18 15-6-6-6 6"/></svg>
-                <span className="font-medium">12% growth this quarter</span>
-              </div>
-            </div>
+          {/* AI feature */}
+          <div className="card-flat p-10 flex flex-col gap-4">
+            <div className="label" style={{ color: '#1A3A2A' }}>Proprietary AI</div>
+            <h3 className="text-xl font-bold" style={{ color: '#0A0A0A', letterSpacing: '-0.02em' }}>
+              Smart Plant Relocation
+            </h3>
+            <p style={{ color: '#5A5A5A', fontSize: '0.9375rem', lineHeight: 1.6 }}>
+              Our robotic gantry system moves plants to peak-yield modules overnight. No downtime, no waste.
+            </p>
           </div>
 
-          {/* AI Optimization */}
-          <div className="md:col-span-5 group relative rounded-2xl overflow-hidden border border-white/[0.05] bg-gradient-to-br from-[#111827] to-[#0C0F17] p-10 min-h-[260px] flex flex-col justify-end hover:border-violet-500/20 transition-all duration-500">
-            <div className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-violet-500/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="absolute top-8 left-8 w-28 h-28 bg-violet-500/[0.05] rounded-full blur-[60px] group-hover:bg-violet-500/[0.1] transition-all duration-700" />
-            <div className="relative">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-violet-500/[0.06] border border-violet-500/[0.1] text-violet-400 text-[10px] font-semibold uppercase tracking-wider mb-4">
-                Proprietary AI
-              </div>
-              <h3 className="text-xl font-semibold mb-3 text-slate-200">Smart Relocation</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">
-                Our robotic gantry system autonomously relocates plants to optimal modules overnight, accelerating your delivery.
-              </p>
-            </div>
-          </div>
-
-          {/* Speed */}
-          <div className="md:col-span-3 group relative rounded-2xl overflow-hidden border border-white/[0.05] bg-gradient-to-br from-[#111827] to-[#0C0F17] p-8 flex flex-col justify-center items-center text-center hover:border-emerald-500/20 transition-all duration-500">
-            <div className="relative">
-              <div className="text-5xl font-black text-gradient-primary leading-none">27</div>
-              <div className="mt-1 text-2xl font-semibold text-slate-400">days</div>
-              <div className="mt-3 text-[10px] uppercase tracking-[0.2em] text-slate-500 font-medium">Fastest Harvest</div>
-            </div>
-          </div>
-
-          {/* Order Precision */}
-          <div className="md:col-span-4 group relative rounded-2xl overflow-hidden border border-white/[0.05] bg-gradient-to-br from-[#111827] to-[#0C0F17] p-8 flex flex-col justify-center items-center text-center hover:border-amber-500/20 transition-all duration-500">
-            <div className="absolute inset-0 bg-gradient-to-br from-amber-500/[0.02] to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <div className="relative flex flex-col items-center">
-              <div className="w-14 h-14 rounded-xl bg-amber-500/[0.08] border border-amber-500/[0.12] flex items-center justify-center mb-5">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-              </div>
-              <h3 className="text-base font-semibold mb-2 text-slate-200">Order by Kilogram</h3>
-              <p className="text-slate-500 text-sm">Exact precision. Zero waste.</p>
+          {/* Precision */}
+          <div className="card-flat p-10 flex flex-col justify-between" style={{ background: '#F3F2EE' }}>
+            <div className="label" style={{ color: 'rgba(10,10,10,0.4)' }}>Precision</div>
+            <div>
+              <div className="heading-display text-6xl" style={{ color: '#0A0A0A', fontWeight: 800 }}>1 kg</div>
+              <div className="text-sm mt-2" style={{ color: '#8A8A8A' }}>Minimum order size. No waste.</div>
             </div>
           </div>
         </div>
       </section>
 
       {/* ─── CTA ─── */}
-      <section className="relative z-10 max-w-[1400px] mx-auto px-8 lg:px-16 pb-32">
-        <div className="relative rounded-2xl overflow-hidden border border-white/[0.05] bg-gradient-to-br from-[#111827] to-[#0C0F17] p-16 md:p-20 text-center">
-          <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/[0.04] via-transparent to-violet-500/[0.04]" />
-          <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[350px] h-[350px] bg-emerald-500/[0.05] rounded-full blur-[120px]" />
-          <div className="relative">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-[-0.03em] mb-6">
-              Ready to grow <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 to-violet-400">smarter</span>?
+      <section className="max-w-[1360px] mx-auto px-8 pb-24">
+        <div className="card-flat p-16 lg:p-20 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-8"
+             style={{ background: '#0A0A0A' }}>
+          <div>
+            <div className="label mb-4" style={{ color: 'rgba(255,255,255,0.3)' }}>Ready?</div>
+            <h2 className="heading-display text-4xl lg:text-5xl text-white" style={{ maxWidth: 500 }}>
+              Start your first order today.
             </h2>
-            <p className="text-slate-400 text-lg max-w-lg mx-auto mb-10 font-light">
-              Join CAV Farming Technologies and experience the future of precision agriculture.
-            </p>
-            <Link href="/register" className="inline-flex items-center gap-2 px-10 py-4 text-sm font-semibold bg-gradient-to-r from-emerald-400 to-emerald-500 text-[#0C0F17] rounded-xl hover:from-emerald-300 hover:to-emerald-400 transition-all duration-300 shadow-[0_4px_24px_rgba(52,211,153,0.25)] hover:shadow-[0_8px_40px_rgba(52,211,153,0.35)] hover:scale-[1.02]">
-              Start Your First Order
+          </div>
+          <div className="shrink-0">
+            <Link href="/register" 
+                  className="inline-flex items-center gap-2 font-semibold text-sm px-8 py-4 rounded-lg transition-all"
+                  style={{ background: '#1A3A2A', color: 'white' }}>
+              Begin Cultivation
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="m9 18 6-6-6-6"/></svg>
             </Link>
           </div>
@@ -317,12 +285,10 @@ export default async function Home() {
       </section>
 
       {/* ─── FOOTER ─── */}
-      <footer className="relative z-10 border-t border-white/[0.03] py-10 px-8 lg:px-16">
-        <div className="max-w-[1400px] mx-auto flex flex-col md:flex-row items-center justify-between gap-6">
-          <div className="flex items-center gap-3">
-            <Image src="/logo.png" alt="CAV" width={90} height={56} className="object-contain opacity-60" />
-          </div>
-          <div className="flex items-center gap-8 text-sm text-slate-600">
+      <footer style={{ borderTop: '1px solid rgba(10,10,10,0.06)' }} className="py-8">
+        <div className="max-w-[1360px] mx-auto px-8 flex items-center justify-between">
+          <Image src="/logo.png" alt="CAV" width={80} height={50} className="object-contain opacity-50" />
+          <div className="flex items-center gap-6 text-xs" style={{ color: 'rgba(10,10,10,0.35)' }}>
             <span>Cultura Ad Verticem</span>
             <span>© 2026</span>
           </div>

@@ -24,10 +24,10 @@ interface AdminStats {
 export default function AdminPage() {
   const { data: session } = useSession();
   const router = useRouter();
-  const [cancellingId, setCancellingId] = useState<string | null>(null);
-  const [showCancelConfirmId, setShowCancelConfirmId] = useState<string | null>(null);
   const [isOptimizing, setIsOptimizing] = useState(false);
-  const [optimizeMessage, setOptimizeMessage] = useState<{type: 'success'|'error', text: string} | null>(null);
+  const [optimizeMsg, setOptimizeMsg] = useState<{type:'success'|'error';text:string}|null>(null);
+  const [cancellingId, setCancellingId] = useState<string|null>(null);
+  const [confirmCancel, setConfirmCancel] = useState<string|null>(null);
 
   useEffect(() => {
     if (session && session.user.role !== 'ADMIN') router.push('/dashboard/orders');
@@ -39,140 +39,151 @@ export default function AdminPage() {
     refetchInterval: 30_000,
   });
 
-  const handleTriggerOptimizer = async () => {
-    setIsOptimizing(true); setOptimizeMessage(null);
+  const handleOptimize = async () => {
+    setIsOptimizing(true); setOptimizeMsg(null);
     try {
       const res = await fetch('/api/admin/optimize', { method: 'POST' });
       if (!res.ok) throw new Error('Failed');
       const data = await res.json();
-      setOptimizeMessage({ type: 'success', text: data.message || 'Optimizer completed successfully.' });
+      setOptimizeMsg({ type: 'success', text: data.message || 'Optimizer completed.' });
       refetch();
-    } catch { setOptimizeMessage({ type: 'error', text: 'Optimizer trigger failed.' }); }
-    finally { setIsOptimizing(false); setTimeout(() => setOptimizeMessage(null), 5000); }
+    } catch { setOptimizeMsg({ type: 'error', text: 'Optimizer trigger failed.' }); }
+    finally { setIsOptimizing(false); setTimeout(() => setOptimizeMsg(null), 6000); }
   };
 
-  const handleCancelOrder = async (id: string) => {
+  const handleCancel = async (id: string) => {
     setCancellingId(id);
-    try { const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' }); if (!res.ok) throw new Error('Failed'); refetch(); }
-    catch { alert('Failed to cancel.'); }
-    finally { setCancellingId(null); setShowCancelConfirmId(null); }
+    try {
+      const res = await fetch(`/api/orders/${id}`, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Failed');
+      refetch();
+    } catch { alert('Failed to cancel.'); }
+    finally { setCancellingId(null); setConfirmCancel(null); }
   };
 
   if (session?.user?.role !== 'ADMIN') return null;
 
   return (
-    <div className="fade-in">
-      <div className="flex items-center justify-between mb-8">
+    <div className="fade-in space-y-8">
+
+      {/* Header */}
+      <div className="flex items-center justify-between pt-2">
         <div>
-          <h1 className="text-2xl font-bold tracking-[-0.02em]">Admin Panel</h1>
-          <p className="text-slate-500 mt-1 text-sm">Facility overview and management</p>
+          <p className="label mb-1" style={{ color: '#8A8A8A' }}>Administration</p>
+          <h1 className="heading-display text-3xl" style={{ color: '#0A0A0A', fontWeight: 700 }}>Admin Panel</h1>
         </div>
         <div className="flex flex-col items-end gap-2">
-          <button 
-            onClick={handleTriggerOptimizer} 
-            disabled={isOptimizing}
-            className="btn-primary disabled:opacity-50 min-w-[160px] flex justify-center items-center gap-2"
-          >
+          <button onClick={handleOptimize} disabled={isOptimizing}
+            className="btn-primary disabled:opacity-50 min-w-[160px]">
             {isOptimizing ? (
               <span className="flex items-center gap-2">
-                <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full" />
+                <svg className="animate-spin h-4 w-4" viewBox="0 0 24 24" fill="none">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"/>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z"/>
+                </svg>
                 Running...
               </span>
             ) : (
               <>
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 12a9 9 0 1 1-6.219-8.56"/></svg>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-.18-4.32"/></svg>
                 Run Optimizer
               </>
             )}
           </button>
-          {optimizeMessage && (
-            <div className={`text-sm px-3 py-1.5 rounded-lg ${
-              optimizeMessage.type === 'success' ? 'bg-emerald-500/[0.06] text-emerald-400 border border-emerald-500/[0.12]' : 'bg-red-500/[0.06] text-red-400 border border-red-500/[0.12]'
-            }`}>
-              {optimizeMessage.text}
+          {optimizeMsg && (
+            <div className="text-xs px-3 py-1.5 rounded-lg"
+                 style={{ background: optimizeMsg.type === 'success' ? '#EDF5EA' : '#FEF2F2', color: optimizeMsg.type === 'success' ? '#1A3A2A' : '#991B1B', border: `1px solid ${optimizeMsg.type === 'success' ? '#C6E2C0' : '#FECACA'}` }}>
+              {optimizeMsg.text}
             </div>
           )}
         </div>
       </div>
 
       {isLoading && (
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin w-7 h-7 border-2 border-emerald-500 border-t-transparent rounded-full" />
-        </div>
+        <div className="card-flat p-10 text-center text-sm" style={{ color: '#8A8A8A' }}>Loading...</div>
       )}
 
       {stats && (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8 stagger">
-            <div className="bento-card p-6">
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Occupancy Rate</div>
-              <div className="text-2xl font-bold text-gradient">{stats.occupancyRate.toFixed(1)}%</div>
-              <div className="mt-3 w-full bg-[#111827] rounded-full h-1.5">
-                <div className="bg-gradient-to-r from-emerald-500 to-teal-500 h-1.5 rounded-full transition-all" style={{ width: `${stats.occupancyRate}%` }} />
+          {/* Stats */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 stagger">
+            <div className="stat-card">
+              <div className="label mb-2" style={{ color: '#8A8A8A' }}>Occupancy</div>
+              <div className="heading-display text-3xl" style={{ color: '#0A0A0A', fontWeight: 800 }}>
+                {stats.occupancyRate.toFixed(1)}%
+              </div>
+              <div className="progress-bar mt-3">
+                <div className="progress-fill progress-fill-green" style={{ width: `${stats.occupancyRate}%` }} />
               </div>
             </div>
-            <div className="bento-card p-6">
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Occupied Spots</div>
-              <div className="text-2xl font-bold text-slate-200">{stats.occupiedSpots.toLocaleString()}</div>
-              <div className="text-xs text-slate-600 mt-1">of {stats.totalSpots.toLocaleString()}</div>
+            <div className="stat-card">
+              <div className="label mb-2" style={{ color: '#8A8A8A' }}>Occupied Spots</div>
+              <div className="heading-display text-3xl" style={{ color: '#0A0A0A', fontWeight: 800 }}>
+                {stats.occupiedSpots.toLocaleString()}
+              </div>
+              <div className="text-xs mt-1" style={{ color: '#8A8A8A' }}>of {stats.totalSpots.toLocaleString()}</div>
             </div>
-            <div className="bento-card p-6">
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Pending Robot Jobs</div>
-              <div className="text-2xl font-bold text-amber-400">{stats.pendingRobotJobs}</div>
+            <div className="stat-card" style={{ borderTop: '2px solid #92400E' }}>
+              <div className="label mb-2" style={{ color: '#92400E' }}>Robot Jobs</div>
+              <div className="heading-display text-3xl" style={{ color: '#0A0A0A', fontWeight: 800 }}>
+                {stats.pendingRobotJobs}
+              </div>
             </div>
-            <div className="bento-card p-6">
-              <div className="text-[10px] text-slate-500 uppercase tracking-wider mb-1">Active Orders</div>
-              <div className="text-2xl font-bold text-violet-400">{stats.activeOrders}</div>
+            <div className="stat-card" style={{ borderTop: '2px solid #1A3A2A' }}>
+              <div className="label mb-2" style={{ color: '#1A3A2A' }}>Active Orders</div>
+              <div className="heading-display text-3xl" style={{ color: '#0A0A0A', fontWeight: 800 }}>
+                {stats.activeOrders}
+              </div>
             </div>
           </div>
 
-          <div className="bento-card overflow-hidden">
-            <div className="px-6 py-4 border-b border-white/[0.04]">
-              <h3 className="text-sm font-semibold text-slate-300">Active Orders</h3>
+          {/* Orders table */}
+          <div className="card-flat overflow-hidden">
+            <div className="px-6 py-4" style={{ borderBottom: '1px solid rgba(10,10,10,0.06)' }}>
+              <h3 className="font-semibold text-sm" style={{ color: '#0A0A0A' }}>Active Orders</h3>
             </div>
-            <table className="w-full">
+            <table className="data-table">
               <thead>
-                <tr className="border-b border-white/[0.04] bg-[#111827]/50">
-                  <th className="text-left text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-6 py-3">Buyer</th>
-                  <th className="text-left text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-6 py-3">Crop</th>
-                  <th className="text-left text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-6 py-3">Quantity</th>
-                  <th className="text-left text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-6 py-3">Status</th>
-                  <th className="text-left text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-6 py-3">Harvest</th>
-                  <th className="text-right text-[10px] font-semibold text-slate-500 uppercase tracking-wider px-6 py-3">Actions</th>
+                <tr>
+                  <th>Buyer</th><th>Crop</th><th>Quantity</th>
+                  <th>Status</th><th>Harvest</th><th></th>
                 </tr>
               </thead>
               <tbody>
+                {stats.orders.length === 0 && (
+                  <tr><td colSpan={6} className="text-center py-8 text-sm" style={{ color: '#8A8A8A' }}>No active orders</td></tr>
+                )}
                 {stats.orders.map((order) => (
-                  <tr key={order.id} className="border-b border-white/[0.03] hover:bg-white/[0.02] transition-colors">
-                    <td className="px-6 py-3 text-sm text-slate-300">{order.buyerName}</td>
-                    <td className="px-6 py-3 text-sm text-slate-400 capitalize">{order.cropType.toLowerCase()}</td>
-                    <td className="px-6 py-3 text-sm text-slate-400">{order.quantityKg} kg</td>
-                    <td className="px-6 py-3">
+                  <tr key={order.id}>
+                    <td className="font-medium" style={{ color: '#0A0A0A' }}>{order.buyerName}</td>
+                    <td className="capitalize" style={{ color: '#5A5A5A' }}>{order.cropType.toLowerCase()}</td>
+                    <td style={{ color: '#5A5A5A' }}>{order.quantityKg} kg</td>
+                    <td>
                       <span className={`badge ${order.status === 'GROWING' ? 'badge-green' : order.status === 'CONFIRMED' ? 'badge-blue' : 'badge-yellow'}`}>
-                        {order.status}
+                        {order.status.toLowerCase()}
                       </span>
                     </td>
-                    <td className="px-6 py-3 text-sm text-slate-500">
+                    <td style={{ color: '#8A8A8A' }}>
                       {order.quotedHarvest ? new Date(order.quotedHarvest).toLocaleDateString() : '—'}
                     </td>
-                    <td className="px-6 py-3 text-right">
-                      {showCancelConfirmId === order.id ? (
-                        <div className="flex gap-2 justify-end items-center">
-                          <span className="text-xs text-red-400">Sure?</span>
-                          <button onClick={() => handleCancelOrder(order.id)} disabled={cancellingId === order.id} className="text-xs font-semibold text-red-400 hover:text-red-300 disabled:opacity-50">Yes</button>
-                          <button onClick={() => setShowCancelConfirmId(null)} disabled={cancellingId === order.id} className="text-xs text-slate-400 hover:text-white disabled:opacity-50">No</button>
+                    <td>
+                      {confirmCancel === order.id ? (
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs" style={{ color: '#991B1B' }}>Sure?</span>
+                          <button onClick={() => handleCancel(order.id)} disabled={cancellingId === order.id}
+                            className="text-xs font-bold" style={{ color: '#991B1B' }}>Yes</button>
+                          <button onClick={() => setConfirmCancel(null)}
+                            className="text-xs" style={{ color: '#5A5A5A' }}>No</button>
                         </div>
                       ) : (
-                        <button onClick={() => setShowCancelConfirmId(order.id)} disabled={cancellingId === order.id} className="text-red-400 hover:text-red-300 text-xs font-medium transition-colors disabled:opacity-50">
+                        <button onClick={() => setConfirmCancel(order.id)} disabled={!!cancellingId}
+                          className="text-xs font-medium" style={{ color: '#DC2626' }}>
                           {cancellingId === order.id ? '...' : 'Cancel'}
                         </button>
                       )}
                     </td>
                   </tr>
                 ))}
-                {stats.orders.length === 0 && (
-                  <tr><td colSpan={6} className="px-6 py-8 text-center text-slate-500 text-sm">No active orders</td></tr>
-                )}
               </tbody>
             </table>
           </div>
