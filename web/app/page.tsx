@@ -12,11 +12,10 @@ export default async function Home() {
     <div className="min-h-screen" style={{ background: '#FAFAF8', color: '#0A0A0A' }}>
 
       {/* ─── NAV ─── */}
-      <nav style={{ borderBottom: '1px solid rgba(10,10,10,0.06)' }} className="sticky top-0 z-50 backdrop-blur-sm" 
-           css-bg="rgba(250,250,248,0.95)">
-        <div className="max-w-[1360px] mx-auto px-8 flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center">
-            <Image src="/logo.png" alt="CAV Farming Technologies" width={110} height={70} className="object-contain" />
+      <nav style={{ borderBottom: '1px solid rgba(10,10,10,0.06)', background: 'rgba(250,250,248,0.95)' }} className="sticky top-0 z-50 backdrop-blur-sm">
+        <div className="max-w-[1360px] mx-auto px-8 flex items-center justify-between h-20">
+          <Link href="/" className="flex items-center -my-2">
+            <Image src="/logo.png" alt="CAV Farming Technologies" width={132} height={84} className="object-contain" />
           </Link>
           <div className="flex items-center gap-2">
             <Link href="/login" className="btn-ghost text-sm">
@@ -40,17 +39,11 @@ export default async function Home() {
 
         {/* Massive heading */}
         <div className="fade-in" style={{animationDelay: '0.05s'}}>
-          <h1 className="heading-display text-[clamp(4rem,10vw,10rem)] leading-none mb-2" 
-              style={{ color: '#0A0A0A', fontWeight: 800, letterSpacing: '-0.04em' }}>
-            CULTURA
-          </h1>
-          <h1 className="heading-display text-[clamp(4rem,10vw,10rem)] leading-none mb-2"
-              style={{ color: '#0A0A0A', fontWeight: 800, letterSpacing: '-0.04em', WebkitTextStroke: '2px #0A0A0A', WebkitTextFillColor: 'transparent' }}>
-            AD
-          </h1>
-          <h1 className="heading-display text-[clamp(4rem,10vw,10rem)] leading-none mb-12"
-              style={{ color: '#1A3A2A', fontWeight: 800, letterSpacing: '-0.04em' }}>
-            VERTICEM
+          <h1 className="heading-display leading-[0.95] mb-12"
+              style={{ fontWeight: 800, letterSpacing: '-0.04em', fontSize: 'clamp(3.5rem,9vw,9rem)' }}>
+            <span style={{ color: '#0A0A0A' }}>Cultivation</span><br/>
+            <span style={{ color: '#0A0A0A', WebkitTextStroke: '2px #0A0A0A', WebkitTextFillColor: 'transparent' }}>towards</span><br/>
+            <span style={{ color: '#1A3A2A' }}>the peak.</span>
           </h1>
         </div>
 

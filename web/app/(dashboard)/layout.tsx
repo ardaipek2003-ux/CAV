@@ -63,9 +63,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
       <aside className="sidebar w-[240px] fixed h-full flex flex-col" style={{ background: '#0F0F0F' }}>
         
         {/* Logo */}
-        <div className="p-6 flex items-center justify-center" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
+        <div className="p-5 flex items-center justify-center" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
           <Link href="/dashboard">
-            <Image src="/logo.png" alt="CAV" width={96} height={60} className="object-contain brightness-0 invert opacity-80" />
+            <Image src="/logo.png" alt="CAV" width={108} height={68} className="object-contain"
+                   style={{ filter: 'invert(1)', opacity: 0.9 }} />
           </Link>
         </div>
 
