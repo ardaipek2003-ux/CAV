@@ -84,7 +84,7 @@ export default function FacilityMap({ orderId }: FacilityMapProps) {
 
     el.addEventListener('wheel', handleNativeWheel, { passive: false });
     return () => el.removeEventListener('wheel', handleNativeWheel);
-  }, []);
+  }, [isLoading]);
 
   if (isLoading) {
     return (
