@@ -58,8 +58,7 @@ export default function RegisterPage() {
 
         <div className="relative z-10">
           <Link href="/">
-            <Image src="/logo.png" alt="CAV" width={132} height={84} className="object-contain"
-                   style={{ filter: 'invert(1)' }} />
+            <Image src="/logo.png" alt="CAV" width={132} height={84} className="object-contain" />
           </Link>
         </div>
 
@@ -94,7 +93,7 @@ export default function RegisterPage() {
           {/* Mobile logo */}
           <div className="lg:hidden mb-12 flex justify-center">
             <Link href="/">
-              <Image src="/logo.png" alt="CAV" width={120} height={76} className="object-contain" />
+              <Image src="/logo.png" alt="CAV" width={132} height={84} className="object-contain" style={{ filter: 'brightness(0)' }} />
             </Link>
           </div>
 

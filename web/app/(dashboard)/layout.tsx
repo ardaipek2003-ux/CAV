@@ -60,13 +60,12 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     <div className="min-h-screen flex" style={{ background: '#FAFAF8' }}>
       
       {/* Sidebar */}
-      <aside className="sidebar w-[240px] fixed h-full flex flex-col" style={{ background: '#0F0F0F' }}>
+      <aside className="sidebar w-[240px] fixed h-full flex flex-col" style={{ background: '#1A3A2A' }}>
         
         {/* Logo */}
         <div className="p-5 flex items-center justify-center" style={{ borderBottom: '1px solid rgba(255,255,255,0.04)' }}>
           <Link href="/dashboard">
-            <Image src="/logo.png" alt="CAV" width={108} height={68} className="object-contain"
-                   style={{ filter: 'invert(1)', opacity: 0.9 }} />
+            <Image src="/logo.png" alt="CAV" width={108} height={68} className="object-contain" />
           </Link>
         </div>
 
@@ -107,8 +106,8 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* User */}
         <div className="p-3" style={{ borderTop: '1px solid rgba(255,255,255,0.04)' }}>
           <div className="flex items-center gap-2.5 px-3 py-2 mb-1">
-            <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold text-white shrink-0"
-                 style={{ background: '#1A3A2A' }}>
+            <div className="w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold shrink-0"
+                 style={{ background: '#FFFFFF', color: '#1A3A2A' }}>
               {session?.user?.name?.[0]?.toUpperCase() || '?'}
             </div>
             <div className="flex-1 min-w-0">

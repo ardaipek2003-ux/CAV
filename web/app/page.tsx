@@ -12,16 +12,16 @@ export default async function Home() {
     <div className="min-h-screen" style={{ background: '#FAFAF8', color: '#0A0A0A' }}>
 
       {/* ─── NAV ─── */}
-      <nav style={{ borderBottom: '1px solid rgba(10,10,10,0.06)', background: 'rgba(250,250,248,0.95)' }} className="sticky top-0 z-50 backdrop-blur-sm">
+      <nav style={{ borderBottom: '1px solid rgba(255,255,255,0.1)', background: '#1A3A2A' }} className="sticky top-0 z-50">
         <div className="max-w-[1360px] mx-auto px-8 flex items-center justify-between h-20">
           <Link href="/" className="flex items-center -my-2">
             <Image src="/logo.png" alt="CAV Farming Technologies" width={132} height={84} className="object-contain" />
           </Link>
           <div className="flex items-center gap-2">
-            <Link href="/login" className="btn-ghost text-sm">
+            <Link href="/login" className="px-4 py-2 text-sm font-medium transition-colors hover:text-white" style={{ color: 'rgba(255,255,255,0.8)' }}>
               Sign in
             </Link>
-            <Link href="/register" className="btn-primary text-sm">
+            <Link href="/register" className="px-4 py-2 text-sm font-semibold rounded-lg transition-colors" style={{ background: '#FFFFFF', color: '#1A3A2A' }}>
               Get started
             </Link>
           </div>
@@ -280,7 +280,7 @@ export default async function Home() {
       {/* ─── FOOTER ─── */}
       <footer style={{ borderTop: '1px solid rgba(10,10,10,0.06)' }} className="py-8">
         <div className="max-w-[1360px] mx-auto px-8 flex items-center justify-between">
-          <Image src="/logo.png" alt="CAV" width={80} height={50} className="object-contain opacity-50" />
+          <Image src="/logo.png" alt="CAV" width={80} height={50} className="object-contain opacity-50" style={{ filter: 'brightness(0)' }} />
           <div className="flex items-center gap-6 text-xs" style={{ color: 'rgba(10,10,10,0.35)' }}>
             <span>Cultura Ad Verticem</span>
             <span>© 2026</span>
