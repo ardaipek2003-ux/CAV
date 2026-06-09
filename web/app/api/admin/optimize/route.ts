@@ -9,7 +9,7 @@ export async function POST() {
       return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
     }
 
-    const algorithmUrl = process.env.ALGORITHM_SERVICE_URL || 'https://algorithm-sandy-nine.vercel.app';
+    const algorithmUrl = process.env.ALGORITHM_SERVICE_URL || 'https://algorithm-taupe-two.vercel.app';
 
     const response = await fetch(`${algorithmUrl}/optimize`, {
       method: 'POST',
